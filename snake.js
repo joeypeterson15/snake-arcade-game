@@ -2,9 +2,9 @@ import { getInputDirection } from "./input.js"
 
 
 //how many times the snake moves per second
-export const snakeSpeed = 3
+export const snakeSpeed = 8
 
-// create array for snake body coorindates (vectors). This ishow we represnet our snake.
+// create array for snake body coorindates. This ishow we represnet our snake.
 // because were using a grid we can represent our snake with an x and y position.
 // just a bunch of segments ina particular x y position on the grid
 const snakeBody = [{ x: 10, y: 11 }]
@@ -13,8 +13,13 @@ let newSegments = 0
 
 export function update () {
 
-    const inputDirection = getInputDirection()
+    //function for adding segments on to the end of snake
+    // everytime we update(for now)
 
+    addSegments()
+
+
+    const inputDirection = getInputDirection()
     for ( let i = snakeBody.length - 2; i >= 0; i--) {
         snakeBody[i + 1] = { ...snakeBody[i]}
     }
@@ -42,9 +47,12 @@ export function draw (gameBoard) {
     })
 }
 
+//the amount input gives the option of changing how much the snake increases in size everytime it eats a fruit
 export function expandSnake(amount) {
     newSegments += amount
 }
+
+//check whether the fruit is in the same place as the snake. the .some function returns true if equal positions returns true for any segment of the snake body.
 
 export function onSnake(position) {
     return snakeBody.some(segment => {
@@ -52,6 +60,27 @@ export function onSnake(position) {
     })
 }
 
-// function equalPositions(pos1, pos2) {
-//     return [pos.]
-// }
+function equalPositions(pos1, pos2) {
+    return pos1.x === pos2.x && pos1.y === pos2.y
+}
+
+function addSegments() {
+    for (let i = 0; i < newSegments; i++){
+        snakeBody.push({...snakeBody[snakeBody.length - 1]})
+    }
+    newSegments = 0
+}
+
+
+export function snakeHeadPosition () {
+    return snakeBody[0]
+}
+
+export function intersection() {
+    let head = snakeHeadPosition()
+    for (let i = 1; i < snakeBody.length; i++) {
+        if (snakeBody[i] === head) return true
+    }
+
+    return false
+}
