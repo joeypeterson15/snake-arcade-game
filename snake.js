@@ -2,7 +2,7 @@ import { getInputDirection } from "./input.js"
 
 
 //how many times the snake moves per second
-export const snakeSpeed = 8
+export const snakeSpeed = 10
 
 // create array for snake body coorindates. This ishow we represnet our snake.
 // because were using a grid we can represent our snake with an x and y position.
@@ -53,9 +53,10 @@ export function expandSnake(amount) {
 }
 
 //check whether the fruit is in the same place as the snake. the .some function returns true if equal positions returns true for any segment of the snake body.
-
-export function onSnake(position) {
-    return snakeBody.some(segment => {
+//Note: the option parameter sets ignore head to false on default if anything is passed
+export function onSnake(position, {ignoreHead = false} = {}) {
+    return snakeBody.some((segment, index) => {
+        if (ignoreHead && index === 0) return false
         return equalPositions(segment, position)
     })
 }
@@ -77,10 +78,5 @@ export function snakeHeadPosition () {
 }
 
 export function intersection() {
-    let head = snakeHeadPosition()
-    for (let i = 1; i < snakeBody.length; i++) {
-        if (snakeBody[i] === head) return true
-    }
-
-    return false
+    return onSnake(snakeBody[0], {ignoreHead: true})
 }
