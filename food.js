@@ -2,13 +2,15 @@ import { onSnake, expandSnake } from './snake.js'
 
 
 
-let food = getRandomFoodPosition()
+// let food = getRandomFoodPosition()
+let food = {x: 1, y: 1}
 const EXPANSION_RATE = 1
 
 export function update () {
     if (onSnake(food)) {
         expandSnake(EXPANSION_RATE)
         food = getRandomFoodPosition()
+        // food = {x: 5, y: 8}
     }
 }
 
@@ -32,5 +34,6 @@ function getRandomFoodPosition () {
 function randomGridPosition () {
     let x = Math.floor(Math.random() * 21) + 1
     let y = Math.floor(Math.random() * 21) + 1
-    return { x, y }
+    console.log('x', x, 'y', y)
+    return { x:x, y:y }
 }
